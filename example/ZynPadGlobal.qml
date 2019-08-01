@@ -148,6 +148,7 @@ Widget {
     function set_amp(base)
     {
         footer.children[0].value = true
+        footer.children[3].value = false
         amp_gen.extern  = base
         amp_env.extern  = base + "AmpEnvelope/"
         amp_lfo.extern  = base + "AmpLfo/"
@@ -159,8 +160,8 @@ Widget {
     }
 
        function set_oscill(base)
-    {
-        footer.children[0].value = true
+    {   
+        footer.children[3].value = true
         amp_gen.extern  = base
         amp_env.extern  = base + "AmpEnvelope/"
         amp_lfo.extern  = base + "AmpLfo/"
@@ -173,6 +174,7 @@ Widget {
     function set_freq(base)
     {
         footer.children[1].value = true
+        footer.children[3].value = false
         amp_gen.extern  = base
         amp_env.extern  = base + "FreqEnvelope/"
         amp_lfo.extern  = base + "FreqLfo/"
@@ -186,6 +188,7 @@ Widget {
     function set_filter(base)
     {
         footer.children[2].value = true
+        footer.children[3].value = false
         amp_gen.extern  = base + "GlobalFilter/"
         amp_env.extern  = base + "FilterEnvelope/"
         amp_lfo.extern  = base + "FilterLfo/"
