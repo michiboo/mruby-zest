@@ -45,8 +45,7 @@ Widget {
             end
             mapping = {0 => :amplitude,
                        1 => :frequency,
-                       2 => :filter,
-                       3 => :oscilloscope}
+                       2 => :filter}
             root.set_view_pos(:subsubview, mapping[id])
             root.change_view
         }
@@ -54,19 +53,18 @@ Widget {
         TabButton { label: "amplitude"; whenClick: lambda {footer.setTab(0)}; highlight_pos: :top}
         TabButton { label: "frequency"; whenClick: lambda {footer.setTab(1)}; highlight_pos: :top}
         TabButton { label: "filter";    whenClick: lambda {footer.setTab(2)}; highlight_pos: :top}
-        TabButton { label: "oscilloscope";  whenClick: lambda {footer.setTab(3)}; highlight_pos: :top}
     }
 
     function set_view()
     {
         subsubview = root.get_view_pos(:subsubview)
-        types = [:amplitude, :frequency, :filter, :oscilloscope]
+        types = [:amplitude, :frequency, :filter]
         if(!types.include?(subsubview))
             subsubview = :amplitude
             root.set_view_pos(:subsubview, subsubview)
         end
         vis = root.get_view_pos(:vis)
-        types = [:envelope, :lfo, :filter, :oscilloscope]
+        types = [:envelope, :lfo, :filter]
         if(!types.include?(vis))
             vis = :envelope
             root.set_view_pos(:vis, vis)
@@ -78,13 +76,9 @@ Widget {
             set_freq(self.extern)
         elsif(subsubview == :filter)
             set_filter(self.extern)
-        elsif(subsubview == :oscilloscope)
-            set_oscill(self.extern)
         end
-        
-        if (subsubview == :oscilloscope)
-            set_vis_oscill(subsubview)
-        elsif(vis == :lfo)
+
+        if(vis == :lfo)
             set_vis_lfo(self.extern, subsubview)
         elsif(vis == :envelope)
             set_vis_env(self.extern, subsubview)
@@ -135,20 +129,9 @@ Widget {
         }
     }
 
-
-    function set_vis_oscill(dummy)
-    {
-        row1.content = Qml::ZynPadOscilloscope
-            amp_gen.children[0].whenModified = lambda {
-            elm = row1.children[0]
-            elm.refresh if elm.respond_to? :refresh
-        }
-    }
-
     function set_amp(base)
     {
         footer.children[0].value = true
-        footer.children[3].value = false
         amp_gen.extern  = base
         amp_env.extern  = base + "AmpEnvelope/"
         amp_lfo.extern  = base + "AmpLfo/"
@@ -159,22 +142,9 @@ Widget {
         amp_lfo.children[0].whenClick = lambda {row1.setDataVis(:lfo, :amp)}
     }
 
-       function set_oscill(base)
-    {   
-        footer.children[3].value = true
-        amp_gen.extern  = base
-        amp_env.extern  = base + "AmpEnvelope/"
-        amp_lfo.extern  = base + "AmpLfo/"
-        amp_gen.content = Qml::ZynPadAmp
-        amp_env.content = Qml::ZynAmpEnv
-        amp_lfo.content = Qml::ZynLFO
-    }
-
-
     function set_freq(base)
     {
         footer.children[1].value = true
-        footer.children[3].value = false
         amp_gen.extern  = base
         amp_env.extern  = base + "FreqEnvelope/"
         amp_lfo.extern  = base + "FreqLfo/"
@@ -188,7 +158,6 @@ Widget {
     function set_filter(base)
     {
         footer.children[2].value = true
-        footer.children[3].value = false
         amp_gen.extern  = base + "GlobalFilter/"
         amp_env.extern  = base + "FilterEnvelope/"
         amp_lfo.extern  = base + "FilterLfo/"
